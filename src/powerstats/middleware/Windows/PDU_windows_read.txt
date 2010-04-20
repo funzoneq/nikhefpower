@@ -1,0 +1,170 @@
+This document describes the use of the PDU php script which allows you 
+to control and manipulate the PDUs connected to your black box.
+
+In order to use the pdu.php script the user needs the PHP interpreter and a MySQL database.
+
+On the CD there is software included to set up a Windows web server with PHP and MySQL integrated.
+
+This Document assumes you have the PHP interpreter and the MySQL Database server installed.
+
+
+
+Windows Clients
+
+Once you have installed WAMP server with PHP and the MySQL database server you can start by 
+copying the needed scripts and files from the "Windows\Tools" directory.
+
+Copy the entire "Tools" directory to a location of your choosing.
+
+This folder contains:
+
+Scripts to do the reading of the units on set intervals:
+dataread.bat		Batch file to automate the calling of the data reader script with Task planner.
+datareader.php		PHP script which does the actual automated reading.
+
+Scripts to do the controlling of the Black Box commands:
+pdu.bat			Batch file to automate the use of the pdu.php script/
+pdu.php			PHP script which does the actual controlling of the commands.
+
+NOTE: when you have installed another PHP interpreter then the one from the WAMP server
+then make sure you edit the batch files’ paths to the PHP interpreter to suite your system.
+
+Class file for interaction with the COM port:
+php_serial.class.php	A special class file which makes the communication possible.
+
+Settings file for user and system settings:
+var.php		Very important settings file. Edit this to suite the needs of your setup.
+
+
+Windows dataread.bat file usage:
+In windows, add a task to the task planner:
+(located in >> Start >> Accessories >> System Work set >> Task planner)
+Give the operation the desired intervals for reading.
+For the task, point to the dataread.bat file. 
+Once this is running, the data will be stored in the database.
+
+NOTE: Before the task planner can execute the batch file, 
+the user needs to make sure the Database is in place.
+
+
+Windows pdu.bat file usage:
+There are several commands that can be performed from the command prompt,
+below will be described how to use them.
+
+
+Creating the database:
+
+When the program is run for the first time, and no database has been created yet,
+its advisable to run the create database and tables command.
+You do this by issuing the following command:
+
+c:\location\of\tools>pdu -c -d
+
+This will result in a database being created in the MySQL server with the needed tables.
+When a database exists, but no tables have been created, you can issue the command:
+
+c:\location\of\tools>pdu -c
+
+Which would only create the tables in the database set in the VAR.inc file.
+
+
+When the database has been set up with the proper tables it is time to fill the tables
+with data collected from the Black Box's connected PDUs.
+When performing a scan for unit numbers, and a unit is found, an entry in the database will be 
+created for the found unit.
+
+
+
+Adding PDUs:
+
+When issued:
+
+c:\location\of\tools>pdu -s -f 1 -t 10
+
+A scan will execute; starting at unit number 1 up to unit number 10.
+
+Defined:
+-s  means we are going to perform a scan
+-f is the option to start FROM a certain unit number
+-t is the option to indicate to scan TO a certain unit number
+
+As an extra, when you want to recreate your data base, you could issue an extra option "-e"
+to clear the current tables from the meter units and switch units and start over.
+
+e.g.  c:\location\of\tools>pdu -s -f 100 -t 200 -e
+
+This would empty the current meter and switch tables and start scanning from unit 100 up until 200.
+All units found with corresponding unit number will be entered in the database.
+
+
+Manually reading the data from the units:
+
+When you have one or multiple units in your database, you can issue a read data command.
+
+e.g.  c:\location\of\tools>pdu -r
+
+This will invoke the read data option, collecting the data from the known units,
+and stores it in the log table.
+
+
+Checking if a unit is online:
+
+You can easily check if a known unit in the database is still present.
+
+c:\location\of\tools>pdu -m
+
+This executes the monitor option and sets the online status of a device in the database.
+
+
+
+Switching outlets:
+
+When you have devices connected to the switch units you are able to turn them on or off
+from a computer connected to the Black Box.  The -x option invokes the switch command.
+
+For example, lets say we have a switch unit connected, unit 1000, and we want to turn on
+the fifth outlet, because ALL the outlets are turned off at the moment.
+
+e.g.  c:\location\of\tools>pdu -x -u 1000 ON -o 5
+
+This will execute the command to turn on the fifth outlet from switch unit 1000.
+Defined:
+-x		Invokes the switch option
+-u		unit indicator, follow by the desired unit needed for switching.
+ON or OFF	States whether the command turns a switch On or Off.
+-o		Outlet indicator, followed by a number for outlet or ALL for all.
+
+Another example, turn all switches on unit 1000 On.
+
+c:\location\of\tools>pdu -x -u 1000 ON -o ALL
+
+
+Querying the current outlet status:
+
+Before switching a outlets on or off, one often desires to know the current status,
+of the outlets, this is achieved by issuing the -q option.
+
+e.g. c:\location\of\tools>pdu -q 1000
+
+This would execute the command to check the current outlets statuses from unit 1000.
+
+
+Resetting the Kwh displays:
+
+When an meter unit has been running for some time, its often desirable to have
+the display reset to zero every so often. this is achieved by performing the -z option.
+
+In this example we have a Kwh meter unit with unit number 1010
+
+c:\location\of\tools>pdu -z 1010
+
+After issuing this command, the display from unit 1010 will be reset to zero.
+Also, you can define a range of units to be reset.
+
+e.g. c:\location\of\tools>pdu -z -f 1000 -t 1050
+
+This will reset all Kwh meter displays in the range of 1000 up to 1050.
+Defined:
+-z 		Reset Kwh display
+-f		From, followed by an unit number.
+-t		To, followed by an unit number.

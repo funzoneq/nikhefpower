@@ -1,0 +1,182 @@
+This document describes the use of the PDU php script which allows you 
+to control and manipulate the PDUs connected to your black box.
+
+In order to use the pdu.php script the user needs the PHP interpreter and a MySQL database.
+
+Seeing as there is a wide variety of Linux architectures, 
+it would be a serious problem to document all available distros and supply 
+PHP and Mysql for all of them.
+Because of this, and generally those who use linux know how to handle their software,
+we decided to let it be upon the linux user to get his or her own copy or download for 
+MySQL and PHP. 
+
+
+This Document assumes you have a PHP interpreter and the MySQL Database server installed.
+
+
+
+Linux Clients
+The needed scripts are located in the "linux\Tools" directory.
+
+Copy the entire "Tools" directory to a location of your choosing.
+
+This folder contains:
+
+Scripts to do the reading of the units on set intervals:
+datareader.php		PHP script which does the automated reading with a Cron job.
+
+Scripts to do the controlling of the Black Box commands:
+pdu.php			PHP script which does the actual controlling of the commands.
+
+
+Class file for interaction with the COM port:
+php_serial.class.php	A special class file which makes the communication possible.
+
+Settings file for user and system settings:
+var.php			Very important settings file. Edit this to suite the needs of your setup.
+
+
+Linux datareader.php file usage:
+By means of cron jobs we can automate the handling of data reading.
+Just add the php script to a cron job with desired intervals.
+
+Open the cron tab editor:
+crontab -e
+
+and add this line:
+0-59/5 * * * * php /location/of/Tools/datareader.php
+
+Make sure to edit the path to suite your system.
+This will invoke the cron job performing a scan every 5 minutes.
+
+Once this is running, the data will be stored in the database.
+
+NOTE: Before the cron job can execute the script, 
+the user needs to make sure the Database is in place.
+
+
+Linux pdu.php file usage:
+There are several commands that can be performed from the command prompt,
+below will be described how to use them.
+
+
+Creating the database:
+
+When the program is run for the first time, and no database has been created yet,
+it’s advisable to run the create database and tables command.
+You do this by issuing the following command:
+
+/location/of/Tools/$ php pdu.php -c -d
+
+This will result in a database being created in the MySQL server with the needed tables.
+When a database exists, but no tables have been created, you can issue the command:
+
+/location/of/Tools/$ php pdu.php -c
+
+Which would only create the tables in the database set in the VAR.inc file.
+
+
+When the database has been set up with the proper tables it is time to fill the tables
+with data collected from the Black Box's connected PDUs.
+When performing a scan for unit numbers, and a unit is found, an entry in the database will be 
+created for the found unit.
+
+
+
+Adding PDUs:
+
+When issued:
+
+/location/of/Tools/$ php pdu.php -s -f 1 -t 10
+
+A scan will execute; starting at unit number 1 up to unit number 10.
+
+Defined:
+-s  means we are going to perform a scan
+-f is the option to start FROM a certain unit number
+-t is the option to indicate to scan TO a certain unit number
+
+As an extra, when you want to recreate your data base, you could issue an extra option "-e"
+to clear the current tables from the meter units and switch units and start over.
+
+e.g.  /location/of/Tools/$ php pdu.php -s -f 100 -t 200 -e
+
+This would empty the current meter and switch tables and start scanning from unit 100 up until 200.
+All units found with corresponding unit number will be entered in the database.
+
+
+Manually reading the data from the units:
+
+When you have one or multiple units in your database, you can issue a read data command.
+
+e.g.  /location/of/Tools/$ php pdu.php -r
+
+This will invoke the read data option, collecting the data from the known units,
+and stores it in the log table.
+
+
+Checking if a unit is online:
+
+You can easily check if a known unit in the database is still present.
+
+/location/of/Tools/$ php pdu.php -m
+
+This executes the monitor option and sets the online status of a device in the database.
+
+
+
+Switching outlets:
+
+When you have devices connected to the switch units you are able to turn them on or off
+from a computer connected to the Black Box.  The -x option invokes the switch command.
+
+For example, lets say we have a switch unit connected, unit 1000, and we want to turn on
+the fifth outlet, because ALL the outlets are turned off at the moment.
+
+e.g.  /location/of/Tools/$ php pdu.php -x -u 1000 ON -o 5
+
+This will execute the command to turn on the fifth outlet from switch unit 1000.
+Defined:
+-x		Invokes the switch option
+-u		unit indicator, follow by the desired unit needed for switching.
+ON or OFF	States whether the command turns a switch On or Off.
+-o		Outlet indicator, followed by a number for outlet or ALL for all.
+
+Another example, turn all switches on unit 1000 On.
+
+/location/of/Tools/$ php pdu.php -x -u 1000 ON -o ALL
+
+
+Querying the current outlet status:
+
+Before switching a outlets on or off, one often desires to know the current status,
+of the outlets, this is achieved by issuing the -q option.
+
+e.g. /location/of/Tools/$ php pdu.php -q 1000
+
+This would execute the command to check the current outlets statuses from unit 1000.
+
+
+Resetting the Kwh displays:
+
+When an meter unit has been runnign for some time, its often desirable to have
+the display reset to zero every so often. this is achieved by performing the -z option.
+
+In this example we have a Kwh meter unit with unit number 1010
+
+/location/of/Tools/$ php pdu.php -z 1010
+
+After issuing this command, the display from unit 1010 will be reset to zero.
+Also, you can define a range of units to be reset.
+
+e.g. /location/of/Tools/$ php pdu.php -z -f 1000 -t 1050
+
+This will reset all Kwh meter displays in the range of 1000 up to 1050.
+Defined:
+-z 		Reset Kwh display
+-f		From, followed by an unit number.
+-t		To, followed by an unit number.
+
+
+
+
