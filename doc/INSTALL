@@ -1,0 +1,6 @@
+HOWTO INSTALL
+
+# GIVE UNPRIVILEGED USER avermeer SERIAL PORT ACCESS:
+sudo usermod -a -G uucp avermeer
+
+easy_install pyserial
