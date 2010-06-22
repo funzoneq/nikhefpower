@@ -3,7 +3,7 @@ from django.db import models
 FEED_CHOICES = ( ('a', 'Feed A'), ('b', 'Feed B'), ('c', 'Feed C'), ('d', 'Feed D') )
 
 class Powerbar(models.Model):
-	bar = models.SmallIntegerField()
+	bar = models.SmallIntegerField(unique=True)
 	rack = models.ForeignKey('Rack')
 	customer = models.ForeignKey('Customer')
 	fase = models.SmallIntegerField()
@@ -20,7 +20,7 @@ class Rack(models.Model):
 class Customer(models.Model):
 	customer = models.SmallIntegerField()
 	name = models.CharField(max_length=255)
-	avgKW = models.SmallIntegerField()
+	avgKW = models.SmallIntegerField(default=2)
 
 class History(models.Model):
         bar = models.ForeignKey('Powerbar')

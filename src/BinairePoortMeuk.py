@@ -112,9 +112,9 @@ class BinairePoortMeuk:
 		results = {}
                 self.initiateReadOut(instruction);
 		for u in units:
-			tempvar = self.readOutUnit(u, instruction);
+			tempvar = self.readOutUnit(u.bar, instruction);
 			if(tempvar != None):
-				results[u] = tempvar;
+				results[u.bar] = tempvar;
                 return results
 
 	def getDictTemperature(self, units):

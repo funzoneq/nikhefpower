@@ -15,7 +15,7 @@ def Poller():
 	bin = BinairePoortMeuk.BinairePoortMeuk();
 	db = DatabaseAbstract.DatabaseAbstract();
 
-	meters = db.getPowerbars();
+	meters = db.getPowerbars()
 
 	temp = bin.getDictTemperature(meters)
 	curr = bin.getDictCurrent(meters)
@@ -25,7 +25,7 @@ def Poller():
 	resultpermeter = {}
 
 	for u in meters:
-		resultpermeter[u] = (temp[u],curr[u],kwhd[u],kwht[u])
+		resultpermeter[u.bar] = (temp[u.bar],curr[u.bar],kwhd[u.bar],kwht[u.bar])
 
 	db.saveHistory(resultpermeter);
 
