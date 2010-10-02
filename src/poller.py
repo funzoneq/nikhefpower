@@ -1,13 +1,4 @@
-''' initiate django meuk '''
-from django.core.management import setup_environ
-import powerbar.settings
-
-setup_environ(powerbar.settings)
-
-from django.db import models
-from powerbar.beheer.models import Powerbar, History
-
-''' inititate scanner meuk '''
+''' inititate poller meuk '''
 import BinairePoortMeuk
 import DatabaseAbstract
 

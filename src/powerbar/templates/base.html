@@ -1,0 +1,20 @@
+<html>
+  <head>
+	<script language="javascript" src="/static/js-class.js" type="text/javascript"></script>
+	<script language="javascript" src="/static/bluff-min.js" type="text/javascript"></script>
+	<script language="javascript" src="/static/excanvas.js" type="text/javascript"></script>
+	<script language="javascript" src="/static/powerbars.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="/static/style.css" />
+	<title>{% block title %}NIKHEF - Power usage{% endblock %}</title>
+  </head>
+  <body>
+	<div id="menu">
+		<ul>
+			<li><a href="/rackview/">Rackview</a></li>
+			{% block menu %}{% endblock %}
+		</ul>
+	</div>
+
+	{% block content %}{% endblock %}
+  </body>
+</html>

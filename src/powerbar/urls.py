@@ -5,13 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Example:
-    # (r'^powerbar/', include('powerbar.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
+    (r'^static/(?P<path>.*)$', 'powerbar.beheer.views.static'),
+    (r'^perrack/(?P<rack>\d{1,3})/$', 'powerbar.beheer.views.perrack'),
+    (r'^powerbar/(?P<unit>\d{3,4})/$', 'powerbar.beheer.views.index'),
+    (r'^rackview/', 'powerbar.beheer.views.rackview'),
     (r'^admin/', include(admin.site.urls)),
 )

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if latest_poll1 %}
+
+<div id="lastpoll">Last poll: 23/12/2010 21:32:11</div>
+
+<div id="content">
+	<ul id="wrapper">
+		{% for rack in latest_poll1 %}
+			<li class="item geel"><a href="/perrack/{{ rack.rack }}/"><h1>{{ rack.rack }}</h1></a>{{ rack.temp }} &deg;C<br />{{ rack.curr }} amp</li>
+		{% endfor %}
+	</ul>
+	<ul id="wrapper">
+		{% for rack in latest_poll2 %}
+			<li class="item geel"><a href="/perrack/{{ rack.rack }}/"><h1>{{ rack.rack }}</h1></a>{{ rack.temp }} &deg;C<br />{{ rack.curr }} amp</li>
+			{% if rack.rack == 19 %}<li class="item paal">paal</li>{% endif %}
+		{% endfor %}
+	</ul>
+
+	<div class="spacer">&nbsp;</div>
+	
+	<ul id="wrapper">
+		{% for rack in latest_poll3 %}
+			<li class="item geel"><a href="/perrack/{{ rack.rack }}/"><h1>{{ rack.rack }}</h1></a>{{ rack.temp }} &deg;C<br />{{ rack.curr }} amp</li>
+		{% endfor %}
+	</ul>
+	<ul id="wrapper">
+		{% for rack in latest_poll4 %}
+			<li class="item geel"><a href="/perrack/{{ rack.rack }}/"><h1>{{ rack.rack }}</h1></a>{{ rack.temp }} &deg;C<br />{{ rack.curr }} amp</li>
+		{% endfor %}
+	</ul>
+</div>
+
+{% else %}
+    <p>No data available.</p>
+{% endif %}
+{% endblock %}

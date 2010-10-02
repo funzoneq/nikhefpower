@@ -1,9 +1,7 @@
 ''' inititate scanner meuk '''
-from struct import *
+import struct
 import serial
 import time
-import MySQLdb
-import getopt, sys
 
 class BinairePoortMeuk:
 	def __init__(self):
@@ -15,18 +13,19 @@ class BinairePoortMeuk:
 		addrl = unit & 255;
 		sum = (command + addrh + addrl + data1 + data2) & 255;
 
-		scan = pack('BBBBBBB', command, addrh, addrl, data1, data2, sum, 13);
+		scan = struct.pack('BBBBBBB', command, addrh, addrl, data1, data2, sum, 13);
 
 		self.ser.write(scan)
 		time.sleep(0.1);
 		s = self.ser.read(7)
 
 		if(len(s) == 0):
-			#print(unit,"Empty result");
 			return
 
 		try:
-			data = unpack("BBBBBBB", s);
+			data = struct.unpack("BBBBBBB", s);
+		except serial.serialutil.SerialException:
+			return
 		except struct.error:
 			return
 
@@ -131,3 +130,18 @@ class BinairePoortMeuk:
 
 	def getMeters(self):
 		return self.meters;
+
+	def switchOutlets(self, unit, outlet, value):
+		if (outlet != 255):
+			outlet = (1 << (outlet - 1)) & 0xFF;					''' convert outlet number to bit value '''
+
+		if (value == 255):
+			print("Switching outlet(s) ON:   ");
+		else:
+			print("Switching outlet(s) OFF:  ");
+	
+		result = self.readPort(114, unit, 0, 0);					''' unlock '''
+		result = self.readPort(19, unit, outlet, value);				''' switch outlet(s) '''
+	
+		if (result < 0):
+			print("no reply from unit!");

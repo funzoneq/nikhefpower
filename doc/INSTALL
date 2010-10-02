@@ -4,3 +4,7 @@ HOWTO INSTALL
 sudo usermod -a -G uucp avermeer
 
 easy_install pyserial
+
+crontab -e
+0 0 * * * /usr/bin/python /user/avermeer/scanner.py > /dev/null
+*/5 * * * * /usr/bin/python /user/avermeer/poller.py > /dev/null

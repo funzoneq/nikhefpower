@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content">
+	{% for p in powerbars %}
+	<a href="/powerbar/{{ p.bar }}/"><canvas id="{{ p.bar }}" width="800" height="300"></canvas></a><br />
+	{% endfor %}
+	
+	<script type="text/javascript">
+	{% for k,v in meuk.items %}
+		var v{{ k }} = {{ v|safe }}
+		var g = createGraph({{ k }}, "Heat vs Current {{ k }}", prepairDataCurrVSTemp(v{{ k }}), new Array("Current", "Temperature"), prepairLabels(v{{ k }}));
+	{% endfor %}
+	</script>
+</div>
+{% endblock %}

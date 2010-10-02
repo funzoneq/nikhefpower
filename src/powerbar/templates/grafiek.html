@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content">
+	<a name="currtemp"></a><canvas id="currtemp" width="800" height="300"></canvas><br />
+	<a name="kwhd"></a><canvas id="kwhd" width="800" height="300"></canvas><br />
+	
+	<script type="text/javascript">
+		var pdata = {{ data|safe }}
+		var g = createGraph('currtemp', "Heat vs Current", prepairDataCurrVSTemp(pdata), new Array("Current", "Temperature"), prepairLabels(pdata));
+		var g = createGraph('kwhd', "KW/h display", prepairDataKWHD(pdata), new Array("KW/h display"), prepairLabels(pdata));
+	</script>
+	
+	<table>
+	  <caption>Metingen laatste 24 uur</caption>
+	  <thead>
+	    <tr>
+		<td>Timestamp</td>
+		<td>Current (amp)</td>
+		<td>Temperature</td>
+		<td>KW/h Display</td>
+		<td>KW/h Total</td>
+	    </tr>
+	  </thead>
+	  <tbody>
+	{% for h in history24 %}
+	    <tr>
+	      <td>{{ h.time }}</td>
+	      <td>{{ h.curr }}</td>
+	      <td>{{ h.temp }}</td>
+	      <td>{{ h.kwhd }}</td>
+	      <td>{{ h.kwht }}</td>
+	    </tr>	
+	{% endfor %}
+	  </tbody>
+	</table>
+	
+</div>
+{% endblock %}
+
+{% block menu %}
+<li><a href="#currtemp">Heat vs Current</a></li>
+<li><a href="#kwhd">KW/h display</a></li>
+{% endblock %}

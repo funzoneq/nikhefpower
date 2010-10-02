@@ -1,0 +1,31 @@
+body { margin: 0; font: 13px Helvetica, sans-serif, courier; line-height: 1.5; }
+#content { position: relative; width: 700px; margin: 0 auto; }
+#wrapper { margin: 0 50px 0 0; padding: 0; float: left; }
+.item { list-style: none; width: 100px; height: 50px; margin: 5px; text-align: center; }
+.item h1 { font-size: 18px; margin: 0 0 0 4px; display: inline; float: left; }
+.paal { background-color: transparent; }
+#lastpoll { position: absolute; top: 0; left: 0; width: 200px; }
+.geel { background-color: #FFFF99; }
+.orange { background-color: #FF9933; }
+.rood { background-color: #CC3300; }
+.spacer { float: left; width: 50px; height: 10px; }
+#menu { position: relative; top: 30px; float: left; width: 250px; }
+table { float: left; border-collapse: collapse; }
+table caption { margin: 1.0em 0 0; }
+table th, table td { text-align: right; border-bottom: 1px solid #ccc; padding: 4px 6px; font-size: 11px; }
+
+.bluff-tooltip {
+	background: #fff;
+	border: 1px solid #d1edf5;
+	padding: 8px 8px 6px;
+}
+.bluff-tooltip .color {
+	display: block;
+	height: 4px;
+	width: 30px;
+	margin: 0 0 4px;
+	overflow: hidden;
+}
+.bluff-tooltip .data {
+	font-weight: bold;
+}
